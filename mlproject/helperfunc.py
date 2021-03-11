@@ -34,15 +34,17 @@ def run_svm(scaled_df):
     
     for i in range(5):
         
-        train_df = scaled_df.sample(5000, replace = True)
+        #train_df = scaled_df.sample(5000, replace = True)
 
-        test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
+        #test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
         
-        X_train = train_df.iloc[:, :-1]
-        y_train = train_df.y
+        X_train, X_test, y_train, y_test = train_test_split(scaled_df.iloc[:, :-1], scaled_df.y, train_size = 5000)
         
-        X_test = test_df.iloc[:, :-1]
-        y_test = test_df.y
+        #X_train = train_df.iloc[:, :-1]
+        #y_train = train_df.y
+        
+        #X_test = test_df.iloc[:, :-1]
+        #y_test = test_df.y
         
         search_results = GridSearchCV(clf, search_params, scoring = metrics, refit = False)
         
@@ -91,12 +93,14 @@ def GridSearch_random_forest(X_train, y_train):
     X_train = X_train.to_numpy().astype('float32')
     y_train = y_train.to_numpy().astype('float32')
     
+    
+    
     folds = KFold(n_splits = 5)
     
     n_estimators_lst = [128, 256, 512, 1024]
     #max_features_lst = [1, 2, 4, 6, 8, 12, 16, 20]
     #max_features_lst = [1 / item for item in max_features_lst]
-    max_features_lst = ['auto', 'sqrt', 'log2']
+    max_features_lst = ['sqrt', 'log2']
         
     fin_arr = []    
     
@@ -142,15 +146,17 @@ def run_random_forest(scaled_df):
     
     for i in range(5):
         
-        train_df = scaled_df.sample(5000, replace = True)
+        #train_df = scaled_df.sample(5000, replace = True)
 
-        test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
+        #test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
         
-        X_train = train_df.iloc[:, :-1]
-        y_train = train_df.y
+        #X_train = train_df.iloc[:, :-1]
+        #y_train = train_df.y
         
-        X_test = test_df.iloc[:, :-1]
-        y_test = test_df.y
+        #X_test = test_df.iloc[:, :-1]
+        #y_test = test_df.y
+        
+        X_train, X_test, y_train, y_test = train_test_split(scaled_df.iloc[:, :-1], scaled_df.y, train_size = 5000)
         
         search_results = GridSearch_random_forest(X_train, y_train)
                 
@@ -205,7 +211,7 @@ def run_log_reg(scaled_df):
     raw_train_arr = []
     raw_test_arr = []
     
-    metrics = ['accuracy', 'f1', 'roc_auc_ovo']
+    metrics = ['accuracy', 'f1', 'roc_auc_ovr']
     
     C_vals = range(-8, 5)
     C_vals = [10 ** val for val in C_vals]
@@ -218,15 +224,16 @@ def run_log_reg(scaled_df):
     
     for i in range(5):
         
-        train_df = scaled_df.sample(5000, replace = True)
+        #train_df = scaled_df.sample(5000, replace = True)
 
-        test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
+        #test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
 
-        X_train = train_df.iloc[:, :-1]
-        y_train = train_df.y
+        #X_train = train_df.iloc[:, :-1]
+        #y_train = train_df.y
 
-        X_test = test_df.iloc[:, :-1]
-        y_test = test_df.y
+        #X_test = test_df.iloc[:, :-1]
+        #y_test = test_df.y
+        X_train, X_test, y_train, y_test = train_test_split(scaled_df.iloc[:, :-1], scaled_df.y, train_size = 5000)
 
 
         #classifier_none = LogisticRegression(penalty = 'none', max_iter = 100000)
@@ -248,7 +255,7 @@ def run_log_reg(scaled_df):
 
         results['mean_accuracy'] = search_results.cv_results_['mean_test_accuracy']
         results['mean_f1'] = search_results.cv_results_['mean_test_f1']
-        results['mean_auc'] = search_results.cv_results_['mean_test_roc_auc_ovo']
+        results['mean_auc'] = search_results.cv_results_['mean_test_roc_auc_ovr']
 
         #results = results.append(no_penalty_df)
                 
@@ -304,15 +311,16 @@ def run_log_reg_skl(scaled_df):
     
     for i in range(5):
         
-        train_df = scaled_df.sample(5000, replace = True)
+        #train_df = scaled_df.sample(5000, replace = True)
 
-        test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
+        #test_df = scaled_df[~scaled_df.index.isin(train_df.index)]
 
-        X_train = train_df.iloc[:, :-1]
-        y_train = train_df.y
+        #X_train = train_df.iloc[:, :-1]
+        #y_train = train_df.y
 
-        X_test = test_df.iloc[:, :-1]
-        y_test = test_df.y
+        #X_test = test_df.iloc[:, :-1]
+        #y_test = test_df.y
+        X_train, X_test, y_train, y_test = train_test_split(scaled_df.iloc[:, :-1], scaled_df.y, train_size = 5000)
 
 
         classifier_none = LogisticRegression(solver = 'saga', penalty = 'none', max_iter = 100000, n_jobs = -1)
